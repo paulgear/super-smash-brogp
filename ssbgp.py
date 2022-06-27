@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2016 Spotify AB. All rights reserved.
 #
@@ -14,12 +14,12 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+import argparse
 import os
 import time
 import yaml
-import argparse
 
-from random import sample, randint, shuffle
+from random import randint, sample
 
 path = os.path.dirname(os.path.realpath(__file__))
 
@@ -64,8 +64,6 @@ def build_as_paths(total, min_as_path, max_as_path):
 
 def announce_prefixes(local_as, prefixes, peer, min_num_prefixes, max_num_prefixes, max_total, announced_prefixes,
                       available_as_paths, num_as_paths, next_hop):
-    i = 0
-
     possible_prefixes = prefixes - announced_prefixes
 
     num = min(randint(min_num_prefixes, max_num_prefixes), max_total - len(announced_prefixes))
@@ -77,8 +75,8 @@ def announce_prefixes(local_as, prefixes, peer, min_num_prefixes, max_num_prefix
 
     for prefix in prefixes_to_announce:
         as_path = [str(i) for i in available_as_paths[randint(0, num_as_paths - 1)]]
-        print 'neighbor {} announce route {} next-hop {} as-path [ {} {} ]'.format(peer, prefix, next_hop, local_as,
-                                                                                   ' '.join(as_path))
+        print('neighbor {} announce route {} next-hop {} as-path [ {} {} ]'.format(peer, prefix, next_hop, local_as,
+                                                                                   ' '.join(as_path)))
 
     return announced_prefixes | prefixes_to_announce
 
@@ -89,7 +87,7 @@ def remove_prefixes(peer, announced_prefixes, remove_prefixes):
     prefixes_to_withdraw = set(sample(announced_prefixes, num))
 
     for prefix in prefixes_to_withdraw:
-        print 'neighbor {} withdraw route {} next-hop self'.format(peer, prefix)
+        print('neighbor {} withdraw route {} next-hop self'.format(peer, prefix))
 
     return announced_prefixes - prefixes_to_withdraw
 
@@ -105,7 +103,7 @@ def main():
 
     available_as_paths = build_as_paths(conf['NUM_DIFFERENT_AS_PATHS'], conf['MIN_AS_LENGTH'], conf['MAX_AS_LENGTH'])
 
-    #Initial warmup according to INITIAL_WARMUP
+    # Initial warmup according to INITIAL_WARMUP
     announced_prefixes = announce_prefixes(
         args.local_as, prefixes, args.peer, conf['INITIAL_WARMUP'], conf['INITIAL_WARMUP'], conf['MAX_TOTAL'],
         announced_prefixes, available_as_paths, conf['NUM_DIFFERENT_AS_PATHS'], conf['NEXT_HOP'])
