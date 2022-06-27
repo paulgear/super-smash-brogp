@@ -51,13 +51,27 @@ def read_prefixes(prefixes_file):
     return prefixes
 
 
+# choose from public & private available ASN ranges:
+# https://www.iana.org/assignments/as-numbers/as-numbers.xhtml
+available_asns = [
+    range(1, 65552),
+    range(131072, 151866),
+    range(196608, 213404),
+    range(262144, 273821),
+    range(327680, 329728),
+    range(393216, 401309),
+    range(4200000000, 4294967295),
+]
+
+
 def build_as_paths(total, min_as_path, max_as_path):
     as_paths = dict()
-    available_as_paths = range(1, 64999)
 
     for i in range(0, total):
-        shuffle(available_as_paths)
-        as_paths[i] = available_as_paths[:randint(min_as_path, max_as_path)]
+        as_paths[i] = []
+        for j in range(0, randint(min_as_path, max_as_path)):
+            asn_range = sample(available_asns, 1)[0]
+            as_paths[i].append(sample(asn_range, 1)[0])
 
     return as_paths
 
