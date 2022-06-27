@@ -84,7 +84,7 @@ def announce_prefixes(local_as, prefixes, peer, min_num_prefixes, max_num_prefix
     if len(possible_prefixes) < num:
         num = len(possible_prefixes)
 
-    prefixes_to_announce = set(sample(possible_prefixes, num))
+    prefixes_to_announce = set(sample(sorted(possible_prefixes), num))
     prefixes_to_announce -= announced_prefixes
 
     for prefix in prefixes_to_announce:
