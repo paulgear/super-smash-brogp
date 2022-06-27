@@ -96,7 +96,7 @@ def announce_prefixes(local_as, prefixes, peer, min_num_prefixes, max_num_prefix
 
 
 def remove_prefixes(peer, announced_prefixes, remove_prefixes):
-    num = len(announced_prefixes) * remove_prefixes / 100
+    num = int(max(len(announced_prefixes) * remove_prefixes / 100, 1))
 
     prefixes_to_withdraw = set(sample(announced_prefixes, num))
 
