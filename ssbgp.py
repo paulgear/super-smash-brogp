@@ -36,7 +36,7 @@ def build_help():
 
 def read_config(config_file):
     with open('{}/{}'.format(path, config_file), 'r') as f:
-        return yaml.load(f)
+        return yaml.safe_load(f)
 
 
 def read_prefixes(prefixes_file):
