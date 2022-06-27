@@ -98,7 +98,9 @@ def announce_prefixes(local_as, prefixes, peer, min_num_prefixes, max_num_prefix
 def remove_prefixes(peer, announced_prefixes, remove_prefixes):
     num = int(max(len(announced_prefixes) * remove_prefixes / 100, 1))
 
-    prefixes_to_withdraw = set(sample(list(announced_prefixes), num))
+    # workaround for sampling from sets being deprecated
+    # https://stackoverflow.com/a/70669440
+    prefixes_to_withdraw = set(sample(sorted(announced_prefixes), num))
 
     for prefix in prefixes_to_withdraw:
         print('neighbor {} withdraw route {} next-hop self'.format(peer, prefix))
